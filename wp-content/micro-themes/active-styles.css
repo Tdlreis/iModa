@@ -1,0 +1,25 @@
+/*  MICROTHEMER STYLES  */
+
+
+/*= Geral ===================== */
+
+/** Geral >> Uagb block 027a1ada 2888 4479 9542 a762466b82ad uagb column overlay **/
+.uagb-block-027a1ada-2888-4479-9542-a762466b82ad > .uagb-column__overlay {
+	
+}
+
+
+/*( Tablet & celular )*/
+@media (max-width: 767px) {
+
+	/*= Geral ===================== */
+
+	/** Geral >> Foto **/
+	#post-37 .uagb-block-d2315a4c-7481-4bfb-b7fb-357b9273e6e3 {
+	width: 0 !important;
+	height: 0 !important;
+}
+
+
+}
+
