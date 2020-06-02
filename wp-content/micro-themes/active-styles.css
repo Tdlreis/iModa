@@ -8,14 +8,27 @@
 	
 }
 
+/** Geral >> Quadros serviços hover **/
+.uagb-column__background-color .uagb-column__inner-wrap:hover {
+	
+}
+
+
+/*= Rodapé =================== */
+
+/** Rodapé >> Colophon ast footer overlay **/
+#colophon .ast-footer-overlay {
+	background-image: linear-gradient(0deg, rgb(136, 217, 199), rgb(255, 255, 255)) !important;
+}
+
 
 /*( Tablet & celular )*/
 @media (max-width: 767px) {
 
 	/*= Geral ===================== */
 
-	/** Geral >> Foto **/
-	#post-37 .uagb-block-d2315a4c-7481-4bfb-b7fb-357b9273e6e3 {
+	/** Geral >> Foto(Sobre nós) **/
+	#post-37 .uagb-block-34023db9-858c-45e2-b40b-6ca4b0a74315 {
 	width: 0 !important;
 	height: 0 !important;
 }
