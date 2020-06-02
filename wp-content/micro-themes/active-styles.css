@@ -10,7 +10,7 @@
 
 /** Geral >> Quadros serviços hover **/
 .uagb-column__background-color .uagb-column__inner-wrap:hover {
-	
+	box-shadow: 0 0 50px rgb(43, 178, 164) inset !important;
 }
 
 
