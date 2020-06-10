@@ -2,7 +2,7 @@
 
 Contributors: bastywebb, joseluiscruz, ahrale
 Donate link: http://themeover.com/microthemer/
-Tags: css editor, css hero, yellow pencil, visual css style editor, style editor, elementor, beaver builder, oxygen, divi, customize theme, css plugin, sass, scss, css grid, animation, transition, fonts, color, colors, google fonts
+Tags: css editor, responsive design, css grid, sass, scss, visual css style editor, style editor, css hero, yellow pencil, elementor, beaver builder, oxygen, divi, customize theme, css plugin, animation, transition, fonts, color, colors, google fonts
 Requires at least: 3.6
 Tested up to: 5.4
 Stable tag: trunk
@@ -97,6 +97,11 @@ Microthemer has built-in documentation! Just click the help icon (top right of t
 9. You can view the CSS code Microthemer generates for debugging or copying and pasting elsewhere. Some users like the fact you can deactivate Microthemer and still make the use of the styles (without having to copy and paste CSS).
 
 == Changelog ==
+
+= 6.2.0.0 (June 5th 2020) =
+
+# Bugs fixed
+* Setting the number of revisions MT stores to more than 300 (the maximum) reset to 50, rather than 300.
 
 = 6.1.6.6 (May 20th 2020) =
 

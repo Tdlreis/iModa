@@ -573,7 +573,6 @@ $this->default_preferences = array(
 	"num_saves" => 0, // keep track of saves for caching purposes
 	// "show_adv_wizard" => 0,
 	"adv_wizard_tab" => 'refine-targeting',
-	"grid_focus" => 'gridtemplate',
 	"overwrite_existing_mqs" => 1,
 	// defaults dependant on lang
 	"tooltip_en_prop" => 1, // $this->is_en() ? 0 : 1,

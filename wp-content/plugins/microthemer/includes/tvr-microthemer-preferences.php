@@ -113,7 +113,7 @@ $this->display_log();
 				),
 				'manual_recompile_all_css' => array(
 					'label' => __('Regenerate all CSS (can fix certain issues)', 'microthemer'),
-					'explain' => __('This is just a temporary setting to fix potential 5.5 upgrade issues', 'microthemer')
+					'explain' => __('If Microthemer encounters an error, this can sometimes fix the issue', 'microthemer')
                 ),
 				/*'boxsizing_by_default' => array(
 					'label' => __('Always use the box-sizing polyfill where relevant', 'microthemer'),

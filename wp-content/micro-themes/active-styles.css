@@ -13,6 +13,16 @@
 	box-shadow: 0 0 50px rgb(43, 178, 164) inset !important;
 }
 
+/** Geral >> #scroll-to-top **/
+#scroll-to-top {
+	z-index: 100 !important;
+}
+
+/** Geral >> Masthead main header bar navigation **/
+#masthead .main-header-bar-navigation {
+	
+}
+
 
 /*= Rodapé =================== */
 
@@ -31,6 +41,25 @@
 	#post-37 .uagb-block-34023db9-858c-45e2-b40b-6ca4b0a74315 {
 	width: 0 !important;
 	height: 0 !important;
+}
+
+	/** Geral >> Masthead main header bar navigation **/
+	#masthead .main-header-bar-navigation {
+	
+}
+
+
+}
+
+
+/*( Celular )*/
+@media (max-width: 480px) {
+
+	/*= Geral ===================== */
+
+	/** Geral >> Masthead main header bar navigation **/
+	#masthead .main-header-bar-navigation {
+	
 }
 
 

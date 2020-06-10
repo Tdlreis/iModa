@@ -5,7 +5,7 @@ Plugin URI: https://themeover.com/microthemer
 Text Domain: microthemer
 Domain Path: /languages
 Description: Microthemer is a feature-rich visual design plugin for customizing the appearance of ANY WordPress Theme or Plugin Content (e.g. posts, pages, contact forms, headers, footers, sidebars) down to the smallest detail. For CSS coders, Microthemer is a proficiency tool that allows them to rapidly restyle a WordPress theme or plugin. For non-coders, Microthemer's intuitive point and click editing opens the door to advanced theme and plugin customization.
-Version: 6.1.6.6
+Version: 6.2.0.0
 Author: Themeover
 Author URI: https://themeover.com
 */
@@ -312,7 +312,7 @@ if ( is_admin() ) {
 		// define
 		class tvr_microthemer_admin {
 
-			var $version = '6.1.6.6';
+			var $version = '6.2.0.0';
 			var $db_chg_in_ver = '6.0.6.5';
 			var $locale = '';
 			var $time = 0;
@@ -763,7 +763,7 @@ if ( is_admin() ) {
                 // add some time before next check
                 else {
 				    $extra_seconds = 12 * 60 * 60; // 12 hours
-	                $extra_seconds = 10;
+	                //$extra_seconds = 10;
 
 	                $inital_time = !empty($checks['next_time']) ? $checks['next_time'] : $this->time;
 	                $pref_array['subscription_checks']['next_time'] =
@@ -805,19 +805,32 @@ if ( is_admin() ) {
                 }
             }
 
-
-            // connect to themeoer directly or via proxy fallback
-            function connect_to_themeover($email, $proxy = false){
+            function themeover_connection_url($email, $proxy = false){
 
 	            $base_url = $proxy
-                    ? 'https://validate.themeover.com/'
-                    : 'https://themeover.com/wp-content/tvr-auto-update/validate.php';
+		            ? 'https://validate.themeover.com/'
+		            : 'https://themeover.com/wp-content/tvr-auto-update/validate.php';
 
-			    $params = 'email='.rawurlencode($email)
+	            $params = 'email='.rawurlencode($email)
 	                      .'&domain='.$this->home_url
 	                      .'&mt_version='.$this->version;
 
-	            $url = $base_url.'?'.$params;
+	            return $base_url.'?'.$params;
+
+            }
+
+
+			/**
+             * Connect to themeover directly or via proxy fallback
+             *
+			 * @param      $url
+			 * @param bool $proxy
+			 *
+			 * @return false|string
+			 */
+            function connect_to_themeover($url, $proxy = false){
+
+	            //$url = $this->themeover_connection_url($email, $proxy);
 	            $responseString = wp_remote_fopen($url);
 	            $response = json_decode($responseString, true);
 
@@ -830,7 +843,7 @@ if ( is_admin() ) {
 
 	            // the initial connection was unsuccessful, possibly due to firewall rules, attempt proxy connection
 	            else {
-	                return $this->connect_to_themeover($email, true);
+	                return $this->connect_to_themeover($url, true);
                 }
 
             }
@@ -843,17 +856,8 @@ if ( is_admin() ) {
                 );
 	            $was_capped_version = $this->is_capped_version();
 	            $response = false;
-
-                // urlencode allows for Gmail + chars in email
-				/*$params = 'email='.rawurlencode($email)
-				          .'&domain='.$this->home_url
-				          .'&mt_version='.$this->version;
-
-	            $url = 'https://themeover.com/wp-content/tvr-auto-update/validate.php?'.$params;*/
-	            //$responseString = wp_remote_fopen($url);
-
-	            $responseString = $this->connect_to_themeover($email);
-
+	            $url = $this->themeover_connection_url($email);
+	            $responseString = $this->connect_to_themeover($url);
 	            //$this->show_me.= $responseString;
 
 				// accommodate new json response format
@@ -3261,7 +3265,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 					$this->maybeCreateOrUpdateRevsTable();
 				}
 
-				// include the user's current media queries form restoring back
+				// include the user's current media queries for restoring back
 				$save_data['non_section']['active_queries'] = $this->preferences['m_queries'];
 
 				// add the revision to the table
@@ -3297,10 +3301,12 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
                         ? intval($this->preferences['num_history_points'])
                         : $default_num_revs;
 
-                //
-                if ($max_revisions > 300 or $max_revisions < 1){
-                    $max_revisions = $default_num_revs;
-                }
+                // cap lowest and highest number of revisions
+                if ($max_revisions > 300){
+                    $max_revisions = 300;
+                } if ($max_revisions < 1){
+					$max_revisions = 1;
+				}
 
 				$maybe_exclude_backups = !$upgrade_backup ? 'and upgrade_backup != 1' : '';
 
@@ -3858,7 +3864,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 							    esc_html__('Merge data is not an array: ', 'microthemer'),
 							    '<pre>Update package: '  . print_r($config, true) . '</pre>'
 						    );
-						    return false;
+						    return $false;
                         }
 
 					    $item = $this->array_merge_recursive_distinct($item, $config['data']);
@@ -3894,6 +3900,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
             }
 
 
+
 			// update the ui options using & reference to behave like JS object
 			function apply_save_package($savePackage, &$data){
 
@@ -3910,6 +3917,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 					    continue;
 				    }
 
+					$before = false;
 					if ($this->debug_save_package) {
 						$before                 = $this->get_or_update_item($data, array_merge($update, array('action' => 'get')));
 						$update[ 'callerFunc' ] = !empty($update[ 'callerFunc' ]) ? $update[ 'callerFunc' ] : '';
@@ -4544,8 +4552,8 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 
             function microthemer_ajax_actions(){
 
-	            if (!current_user_can('administrator')){
-		            wp_die('Access denied');
+	            if ( !current_user_can('administrator') ){
+		            wp_die( 'Access denied' );
 	            }
 
 	            // simple ajax operations that can be executed from any page, pointing to ui page
@@ -4560,7 +4568,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 		            }
 
 		            // if it's an options save request
-		            if (isset($_GET['mt_action']) and $_GET['mt_action'] == 'mt_save_interface') {
+		            if (isset($_GET['mt_action']) and $_GET['mt_action'] === 'mt_save_interface') {
 
 			            // remove slashes and custom escaping so that DB data is clean
 			            $this->serialised_post =
@@ -5573,7 +5581,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 
             }
 
-			// Microthemer UI page - also accessible via ajax call
+			// Microthemer UI page
 			function microthemer_ui_page() {
 
 				// only run code if it's the ui page
@@ -5970,19 +5978,6 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 				}
 			}
 
-			// show plugin menu
-			function plugin_menu() {
-				?>
-                <div id='plugin-menu' class="fixed-subsection">
-                    <h3>Plugin Menu</h3>
-                    <div class='menu-option-wrap'>
-                        <a id="tvr-item-1" href='admin.php?page=<?php echo $this->microthemeruipage;?>' title="<?php esc_attr_e('Go to Microthemer UI Page', 'microthemer') ?>">UI</a>
-                        <a id="tvr-item-2" href='admin.php?page=<?php echo $this->microthemespage;?>' title="<?php esc_attr_e('Go to Manage Micro Themes Page', 'microthemer') ?>">Manage</a>
-                        <a id="tvr-item-3" href='admin.php?page=<?php echo $this->preferencespage;?>' title="<?php esc_attr_e('Go to Microthemer Preferences Page', 'microthemer') ?>">Options</a>
-                    </div>
-                </div>
-				<?php
-			}
 
 			// show need help videos
 			function need_help_notice() {
@@ -6644,7 +6639,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 				if ( is_dir($dir_path . $name ) ) {
 					$suffix = 1;
 					do {
-						$alt_name = substr ($name, 0, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
+						$alt_name  = substr ($name, 0, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
 						$dir_check = is_dir($dir_path . $alt_name);
 						$suffix++;
 					} while ( $dir_check );
@@ -6979,6 +6974,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 				$icon_class = $con.'-toggle input-icon-toggle';
 				$icon_inside = '';
 				$data_atts_arr = array();
+				$pos_title = '';
 
 				// set MQ stub for tab and pg inputs
 				$imp_key = '';
@@ -7157,7 +7153,7 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
                 );
             }
 
-			// output meta spans and logs tmpl for manage pages
+			// output meta spans and logs tmpl for manage pages // todo -  use JS object rather than spans
 			function manage_packs_meta(){
 				?>
                 <span id="ajaxUrl" rel="<?php echo $this->wp_ajax_url; ?>"></span>
@@ -7328,8 +7324,6 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 
 				// menu groups
 				foreach ($this->menu as $group_key => $arr){
-
-
 
 					$html.= '
 					<li class="mt-group '.$group_key.'">
@@ -7504,7 +7498,10 @@ $this->show_me = '<pre>$media_queries_list: '.print_r($media_queries_list, true)
 				// get value object, array, and string value
                 $valueArray = false;
 				$valueObject = $value;
-				$value = is_array($valueObject) && !empty($valueObject['value']) ? $valueObject['value'] : '';
+				$value = is_array($valueObject) && !empty($valueObject['value'])
+                    ? $valueObject['value']
+                    : ''; // should this be
+
                 if (is_array($value)){
 	                $valueArray = $value;
 	                $value = !empty($valueArray[0]) ? $valueArray[0] : '';
@@ -11718,7 +11715,7 @@ if (!is_admin()) {
 			var $preferencesName = 'preferences_themer_loader';
 			// @var array $preferences Stores the ui options for this plugin
 			var $preferences = array();
-			var $version = '6.1.6.6';
+			var $version = '6.2.0.0';
 			var $microthemeruipage = 'tvr-microthemer.php';
 			var $file_stub = '';
 			var $min_stub = '';
@@ -12129,6 +12126,8 @@ if (!is_admin()) {
 
 			// add first and last classes to menus
 			function add_first_and_last_classes( $classes, $item, $args ) {
+
+                //wp_die('The menu stuff: '. '<pre>'.print_r($args->menu).'</pre>');
 
 				// store menu item count if not done already
 				if (empty($this->menu_item_counts[ $args->menu->slug ])){
