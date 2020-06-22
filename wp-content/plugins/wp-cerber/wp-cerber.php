@@ -5,7 +5,7 @@
 	Description: Defends WordPress against hacker attacks, spam, trojans, and viruses. Malware scanner and integrity checker. Hardening WordPress with a set of comprehensive security algorithms. Spam protection with a sophisticated bot detection engine and reCAPTCHA. Tracks user and intruder activity with powerful email, mobile and desktop notifications.
 	Author: Cerber Tech Inc.
 	Author URI: https://wpcerber.com
-	Version: 8.6.3
+	Version: 8.6.5
 	Text Domain: wp-cerber
 	Domain Path: /languages
 	Network: true
@@ -31,7 +31,7 @@
 
 */
 
-define( 'CERBER_VER', '8.6.3' );
+define( 'CERBER_VER', '8.6.5' );
 define( 'CERBER_PLUGIN_ID', 'wp-cerber/wp-cerber.php' );
 
 function cerber_plugin_file() {
@@ -159,7 +159,8 @@ function cerber_get_upload_dir_mu() {
 }
 
 function cerber_get_abspath() {
-	static $abspath;
+	static $abspath = null;
+
 	if ( $abspath === null ) {
 		$abspath = cerber_normal_path( ABSPATH );
 	}

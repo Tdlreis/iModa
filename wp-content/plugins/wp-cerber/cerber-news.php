@@ -96,6 +96,13 @@ function cerber_push_the_news( $version ) {
 	$news['8.6.3'][] = 'Fixed: The access list IPv4 wildcard *.*.*.* doesn\'t work (has no effect).';
 	$news['8.6.3'][] = 'Fixed: If the anti-spam query whitelist contains more than one entry, they do not work as expected.';
 
+	$news['8.6.5'][] = 'File system analytics. It\'s generated based on the results of the last full integrity scan.';
+	$news['8.6.5'][] = 'Logging user deletions. The user’s display name and roles are temporarily stored until all log entries related to the user are deleted.';
+	$news['8.6.5'][] = 'Faster export with a new date format for CSV log export.';
+	$news['8.6.5'][] = 'Ability to disable adding the website administrator\'s IP address to the White IP Access List upon WP Cerber activation.';
+	$news['8.6.5'][] = 'Improved: Handling user registrations with prohibited emails.';
+	$news['8.6.5'][] = 'Fixed: Loading the default plugin settings has no effect. Now it’s fixed and moved from the admin sidebar to the Tools admin page.';
+
 
 	if ( ! empty( $news[ $version ] ) ) {
 		//$text = '<h3>What\'s new in WP Cerber '.$version.'</h3>';
@@ -107,7 +114,7 @@ function cerber_push_the_news( $version ) {
 		$text .= '	<p style="margin-top: 18px; font-weight: bold;"><a href="https://wpcerber.com/?plugin_version='.$version.'" target="_blank">Read more on wpcerber.com</a></p>';
 		$text .= '	<p style="margin-top: 18px; font-weight: bold;"><a href="'.cerber_admin_link('change-log').'">See the whole history in the changelog</a></p>';
 
-		$text .= '	<p style="margin-top: 24px;"><span class="dashicons-before dashicons-email-alt"></span> &nbsp; <a href="https://wpcerber.com/subscribe-newsletter/">Subscribe to Cerber\'s newsletter</a></p>
+		$text .= '	<p style="margin-top: 24px;"><span class="dashicons-before dashicons-email-alt"></span> &nbsp; <a href="https://wpcerber.com/subscribe-newsletter/">Subscribe to the Cerber\'s newsletter</a></p>
 					<p><span class="dashicons-before dashicons-twitter"></span> &nbsp; <a href="https://twitter.com/wpcerber">Follow Cerber on Twitter</a></p>
 					<p><span class="dashicons-before dashicons-facebook"></span> &nbsp; <a href="https://www.facebook.com/wpcerber/">Follow Cerber on Facebook</a></p>
 				';

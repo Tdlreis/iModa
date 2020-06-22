@@ -1,5 +1,11 @@
 CHANGELOG
 
+= 6.2.0.2 (June 9th 2020) =
+
+# Bugs fixed
+* CSS conflict with Admin 2020 theme.
+* Possible JavaScript error when updating to 6.2: cannot read property 'property' of undefined.
+
 = 6.2.0.0 (June 5th 2020) =
 
 # Bugs fixed

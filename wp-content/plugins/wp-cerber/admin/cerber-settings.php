@@ -38,7 +38,13 @@ if ( ! defined( 'WPINC' ) || ! defined( 'CERBER_VER' ) ) {
 // @since 8.5.9.1
 define( 'CRB_SETTINGS_GROUP', 'cerber_settings_group' );
 
-add_action( 'admin_init', 'cerber_admin_init' );
+add_action( 'admin_init', function () { // @since 8.6.3.1
+	cerber_admin_init();
+	cerber_export();
+	cerber_import();
+	cerber_unsubscribeme();
+} );
+
 function cerber_admin_init() {
 	global $crb_assets_url, $crb_ajax_loader;
 	$crb_assets_url  = cerber_plugin_dir_url() . 'assets/';
@@ -383,7 +389,7 @@ function cerber_field_show( $args ) {
 			break;
 
 		case 'textarea':
-			$html = '<textarea class="large-text code" id="' . $id . '" name="' . $name . '" ' . $atts . $data . '>' . $value . '</textarea>';
+			$html = '<textarea class="large-text crb-monospace" id="' . $id . '" name="' . $name . '" ' . $atts . $data . '>' . $value . '</textarea>';
 			$html .= '<br/><label class="crb-below" for="' . $args['setting'] . '">' . $label . '</label>';
 			break;
 

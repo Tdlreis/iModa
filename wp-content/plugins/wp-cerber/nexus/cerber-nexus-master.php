@@ -197,18 +197,14 @@ function nexus_get_groups() {
 	return $groups;
 }
 
-//add_action( 'setup_theme', function () {
-add_action( 'admin_init', function () { // 8.3.3
-	if ( ! is_admin() || ! nexus_is_master() ) {
-		return;
-	}
-	nexus_set_context();
-	if ( nexus_get_context() ) {
-		nexus_send_admin_request();
-	}
-}, 0 );
-
 add_action( 'admin_init', function () {
+
+	if ( is_admin() && nexus_is_master() ) { // @since 8.6.3.3
+		nexus_set_context();
+		if ( nexus_get_context() ) {
+			nexus_send_admin_request();
+		}
+	}
 
 	if ( nexus_is_master() && function_exists( 'nexus_schedule_refresh' ) ) {
 		nexus_schedule_refresh();
@@ -266,7 +262,7 @@ add_action( 'admin_init', function () {
 		return '';
 	}, 10, 3 );
 
-} );
+}, 0 );
 
 function nexus_add_slave( $token ) {
 	if ( ! is_super_admin() || ! nexus_is_master() ) {
@@ -729,7 +725,7 @@ function nexus_send( $request, $slave_id = null ) {
             ?>
 
             <p style="margin-top: 2em;">Diagnostic information</p>
-            <p class="code" style="font-size: 90%">
+            <p class="crb-monospace" style="font-size: 90%">
                 HTTP code: <?php echo $nexus_last_http; ?><br/>
                 Response size: <?php echo $nexus_last_curl['size_download']; ?><br/>
                 IP address: <?php echo $ip; ?><br/>
@@ -1117,9 +1113,9 @@ function nexus_do_bulk() {
 
 function nexus_bg_upgrade( $ids, $plugins ) {
 	foreach ( $ids as $id ) {
-		cerber_bg_task_add( array(
-			'func'  => 'nexus_do_upgrade',
-			'args'  => array( $id, $plugins, false ),
+		cerber_bg_task_add( 'nexus_do_upgrade', array(
+			//'func'  => 'nexus_do_upgrade',
+			'args'       => array( $id, $plugins, false ),
 			'exec_until' => 'stop', // may not be boolean
 		) );
 	}
@@ -1196,8 +1192,8 @@ function nexus_schedule_refresh() {
 }
 
 function nexus_add_bg_refresh( $slave_id ) {
-	cerber_bg_task_add( array( 'func' => 'nexus_send', 'args' => array( array( 'type' => 'hello' ), $slave_id ) ) );
-	cerber_bg_task_add( array( 'func' => 'nexus_refresh_slave_srv', 'args' => array( $slave_id ) ) );
+	cerber_bg_task_add( 'nexus_send', array( 'args' => array( array( 'type' => 'hello' ), $slave_id ) ) );
+	cerber_bg_task_add( 'nexus_refresh_slave_srv', array( 'args' => array( $slave_id ) ) );
 }
 
 add_action( 'wp_before_admin_bar_render', function () {

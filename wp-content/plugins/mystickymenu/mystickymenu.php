@@ -3,7 +3,7 @@
 Plugin Name: myStickymenu
 Plugin URI: https://premio.io/
 Description: Simple sticky (fixed on top) menu implementation for navigation menu and Welcome bar for announcements and promotion. After install go to Settings / myStickymenu and change Sticky Class to .your_navbar_class or #your_navbar_id.
-Version: 2.4.1
+Version: 2.4.2
 Author: Premio
 Author URI: https://premio.io/downloads/mystickymenu/
 Text Domain: mystickymenu
@@ -12,7 +12,7 @@ License: GPLv2 or later
 */
 
 defined('ABSPATH') or die("Cannot access pages directly.");
-define( 'MYSTICKY_VERSION', '2.4.1' );
+define( 'MYSTICKY_VERSION', '2.4.2' );
 require_once("mystickymenu-fonts.php");
 require_once("welcome-bar.php");
 
@@ -1029,7 +1029,9 @@ class MyStickyMenuFrontend
 			echo '<style id="mystickymenu" type="text/css">';
 			echo '#mysticky-nav { width:100%; position: static; }';
 			echo '#mysticky-nav.wrapfixed { position:fixed; left: 0px; margin-top:0px;  z-index: '. $mysticky_options ['myfixed_zindex'] .'; -webkit-transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; -moz-transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; -o-transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=' . $mysticky_options ['myfixed_opacity'] . ')"; filter: alpha(opacity=' . $mysticky_options ['myfixed_opacity'] . '); opacity:' . $mysticky_options ['myfixed_opacity'] / 100 . '; background-color: ' . $mysticky_options ['myfixed_bgcolor'] . ';}';
+			if ( isset($mysticky_options ['myfixed_textcolor']) && $mysticky_options ['myfixed_textcolor'] != '' ) {
 			echo '#mysticky-nav.wrapfixed ul li.menu-item a { color: ' . $mysticky_options ['myfixed_textcolor'] . ';}';
+			}
 
 
 			if  ($mysticky_options ['myfixed_disable_small_screen'] > 0 ){

@@ -3,7 +3,7 @@ Contributors: tomeraharon, galdub, premio
 Tags:menu, header, sticky menu, sticky header, floating menu, floating navigation menu, navigation menu, navigation, sticky navigation menu, welcome bar, hello bar, top bar, sticky bar, floating bar, notification bar
 Requires at least: 3.5.1
 Tested up to: 5.4
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 License: GPLv2 or later
 
 This sticky menu plugin will make your menu or header stick to the top of page, when scrolled down and up. Also create a beautiful welcome notification bar with it.
@@ -265,6 +265,8 @@ After installing the plugin, you’ll have the option to turn on the welcome bar
 
 
 == Changelog ==
+= 2.4.2 =
+iPhone and iPad notification bar and sticky menu frontend issues fixed
 = 2.4.1 =
 Credit removal
 = 2.4 =

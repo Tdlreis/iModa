@@ -217,10 +217,10 @@ function lab_api_send_request( $workload = array(), $payload_key = null ) {
  *
  * @return array|bool The response of a node on the success request otherwise false on any error
  */
-function lab_send_request($request, $node_id = null, $scheme = null) {
+function lab_send_request( $request, $node_id = null, $scheme = null ) {
 	global $node_delay;
 
-	$node = lab_get_node($node_id);
+	$node = lab_get_node( $node_id );
 	if ( ! $scheme ) {
 		if ( crb_get_settings( 'cerberproto' ) ) {
 			$scheme = 'https';
@@ -229,7 +229,7 @@ function lab_send_request($request, $node_id = null, $scheme = null) {
 			$scheme = 'http';
 		}
 	}
-	elseif ($scheme != 'http' || $scheme != 'https') {
+	elseif ( $scheme != 'http' || $scheme != 'https' ) {
 		$scheme = 'https';
 	}
 
@@ -237,17 +237,17 @@ function lab_send_request($request, $node_id = null, $scheme = null) {
 	$body['container'] = $request;
 	$body['nodes'] = lab_get_nodes();
 
-	$request_body = json_encode($body);
-	if (JSON_ERROR_NONE != json_last_error()) {
+	$request_body = json_encode( $body );
+	if ( JSON_ERROR_NONE != json_last_error() ) {
 		//'Unable to encode request: '.json_last_error_msg(), array(__FUNCTION__,__LINE__));
 		return false;
 	}
 
 	$headers = array(
-		'Host:'.$node[2],
+		'Host:' . $node[2],
 		'Content-Type: application/json',
 		'Accept: application/json',
-		'Cerber: '.CERBER_VER,
+		'Cerber: ' . CERBER_VER,
 		/*	'Authorization: Bearer ' . $fields['key']*/
 	);
 
@@ -272,8 +272,8 @@ function lab_send_request($request, $node_id = null, $scheme = null) {
 	) );
 
 	$start = microtime( true );
-	$data  = @curl_exec( $curl );
-	$stop  = microtime( true );
+	$data = @curl_exec( $curl );
+	$stop = microtime( true );
 
 	$node_delay = $stop - $start;
 
@@ -282,14 +282,12 @@ function lab_send_request($request, $node_id = null, $scheme = null) {
 	}
 	else {
 		$response['status'] = 0;
-		$code               = intval( curl_getinfo( $curl, CURLINFO_HTTP_CODE ) );
-		$response['error']  = 'No connection (' . $code . ')';
+		$code = intval( curl_getinfo( $curl, CURLINFO_HTTP_CODE ) );
+		$response['error'] = 'No connection (' . $code . ')';
 		//if (!$data) // curl_error($curl) . curl_errno($curl) );
 	}
 
 	curl_close( $curl );
-
-	//$response = lab_parse_response( $data );
 
 	lab_update_node_last( $node[0], array(
 		$node_delay,
@@ -312,7 +310,7 @@ function lab_send_request($request, $node_id = null, $scheme = null) {
  *
  * @param $response
  *
- * @return array|mixed|object
+ * @return array
  */
 function lab_parse_response( $response ) {
 	$ret = array( 'status' => 1, 'error' => false );
@@ -321,7 +319,7 @@ function lab_parse_response( $response ) {
 		$ret = json_decode( $response, true );
 		if ( JSON_ERROR_NONE != json_last_error() ) {
 			$ret['status'] = 0;
-			$ret['error']  = 'JSON ERROR: ' . json_last_error_msg();
+			$ret['error'] = 'JSON ERROR: ' . json_last_error_msg();
 		}
 		// Is everything is OK?
 		if ( empty( $ret['key'] ) || ! empty( $ret['error'] ) ) {
@@ -330,7 +328,7 @@ function lab_parse_response( $response ) {
 	}
 	else {
 		$ret['status'] = 0;
-		$ret['error']  = 'No node answer';
+		$ret['error'] = 'No node answer';
 	}
 
 	if ( ! isset( $ret['error'] ) ) {
@@ -344,17 +342,23 @@ function lab_parse_response( $response ) {
  * Return "the best" (closest) node if $node_id is not specified
  *
  * @param $node_id integer node ID
+ *
  * @return array first element is ID of closest node, second is an IP address
  */
-function lab_get_node($node_id = null){
+function lab_get_node( $node_id = null ) {
 
-	$node_id = absint($node_id);
-	if ($node_id) $best_id = $node_id;
-	else $best_id = null;
+	$node_id = absint( $node_id );
+
+	if ( $node_id ) {
+		$best_id = $node_id;
+	}
+	else {
+		$best_id = null;
+	}
 
 	$nodes = lab_get_nodes();
 
-	if (!$best_id) {
+	if ( ! $best_id ) {
 		if ( $nodes && ! empty( $nodes['best'] ) ) {
 			$best_id = $nodes['best'];
 			if ( ! $nodes['nodes'][ $best_id ]['last'][1] ) { // this node was not active at the last request
@@ -364,7 +368,9 @@ function lab_get_node($node_id = null){
 		}
 	}
 
-	if (!$best_id || $best_id > LAB_NODE_MAX) $best_id = rand(1, LAB_NODE_MAX);
+	if ( ! $best_id || $best_id > LAB_NODE_MAX ) {
+		$best_id = rand( 1, LAB_NODE_MAX );
+	}
 
 	$name = 'node' . $best_id . '.cerberlab.net';
 
@@ -379,7 +385,7 @@ function lab_get_node($node_id = null){
 		$host = @gethostbyname( $name );
 	}
 
-	return array($best_id, $host, $name);
+	return array( $best_id, $host, $name );
 }
 
 /**
@@ -398,21 +404,21 @@ function lab_check_nodes( $force = false, $kick_dns = false ) {
 	}
 
 	$nodes['nodes'] = array(); // clean up before testing
-	//update_site_option( '_cerberlab_', $nodes );
+
 	cerber_update_set( '_cerberlab_', $nodes );
 
 	for ( $i = 1; $i <= LAB_NODE_MAX; $i ++ ) {
 		if ( $kick_dns ) {
 			@gethostbyname( 'node' . $i . '.cerberlab.net' );
 		}
+
 		lab_send_request( array( 'test' => 'test', 'key' => 1 ), $i );
 	}
 
-	$nodes               = lab_get_nodes();
-	$nodes['best']       = lab_best_node( $nodes['nodes'] );
+	$nodes = lab_get_nodes();
+	$nodes['best'] = lab_best_node( $nodes['nodes'] );
 	$nodes['last_check'] = time();
 
-	//update_site_option( '_cerberlab_', $nodes );
 	cerber_update_set( '_cerberlab_', $nodes );
 
 	return $nodes['best'];
@@ -423,15 +429,20 @@ function lab_check_nodes( $force = false, $kick_dns = false ) {
  *
  * @param array $nodes
  *
- * @return int
+ * @return int the ID of a node, 0 if no node available
  */
 function lab_best_node( $nodes = array() ) {
+	if ( empty( $nodes ) ) {
+		return 0;
+	}
+
 	$active_nodes = array();
 	foreach ( $nodes as $id => $data ) {
 		if ( $data['last']['1'] ) {  // only active nodes must be in the list
 			$active_nodes[ $id ] = $data['last']['0'];
 		}
 	}
+
 	if ( $active_nodes ) {
 		asort( $active_nodes );
 		reset( $active_nodes );
@@ -485,6 +496,7 @@ function lab_status() {
 	}
 
 	$tb = array();
+	ksort( $nodes['nodes'] );
 
 	foreach ( $nodes['nodes'] as $id => $node ) {
 		$delay  = round( 1000 * $node['last'][0] ) . ' ms';

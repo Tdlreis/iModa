@@ -36,22 +36,25 @@
 // If this file is called directly, abort executing.
 if ( ! defined( 'WPINC' ) ) { exit; }
 
-define('CERBER_SETTINGS','cerber_settings');
-define('CERBER_OPT','cerber-main');
-define('CERBER_OPT_H','cerber-hardening');
-define('CERBER_OPT_U','cerber-users');
-define('CERBER_OPT_A','cerber-antispam');
-define('CERBER_OPT_C','cerber-recaptcha');
-define('CERBER_OPT_N','cerber-notifications');
-define('CERBER_OPT_T','cerber-traffic');
-define('CERBER_OPT_S','cerber-scanner');
-define('CERBER_OPT_E','cerber-schedule');
-define('CERBER_OPT_P','cerber-policies');
-define('CERBER_OPT_US','cerber-user_shield');
-define('CERBER_OPT_OS','cerber-opt_shield');
-define('CERBER_OPT_SL','cerber-nexus-slave');
-define('CERBER_OPT_MA','cerber-nexus_master');
+// Processed by WP Settings API
+define( 'CERBER_OPT', 'cerber-main' );
+define( 'CERBER_OPT_H', 'cerber-hardening' );
+define( 'CERBER_OPT_U', 'cerber-users' );
+define( 'CERBER_OPT_A', 'cerber-antispam' );
+define( 'CERBER_OPT_C', 'cerber-recaptcha' );
+define( 'CERBER_OPT_N', 'cerber-notifications' );
+define( 'CERBER_OPT_T', 'cerber-traffic' );
+define( 'CERBER_OPT_S', 'cerber-scanner' );
+define( 'CERBER_OPT_E', 'cerber-schedule' );
+define( 'CERBER_OPT_P', 'cerber-policies' );
+define( 'CERBER_OPT_US', 'cerber-user_shield' );
+define( 'CERBER_OPT_OS', 'cerber-opt_shield' );
+define( 'CERBER_OPT_SL', 'cerber-nexus-slave' );
+define( 'CERBER_OPT_MA', 'cerber-nexus_master' );
 
+// Processed by Cerber
+define( 'CERBER_SETTINGS', 'cerber_settings' );
+define( 'CERBER_GEO_RULES', 'geo_rule_set' );
 // A new, united settings entry
 // @since 8.5.9.1
 define( 'CERBER_CONFIG', 'cerber_configuration' );
@@ -59,10 +62,17 @@ define( 'CERBER_CONFIG', 'cerber_configuration' );
 /**
  * A set of Cerber settings (WP options)
  *
+ * @param bool $all
  * @return array
  */
-function cerber_get_setting_list() {
-	return array( CERBER_SETTINGS, CERBER_OPT, CERBER_OPT_H, CERBER_OPT_U, CERBER_OPT_A, CERBER_OPT_C, CERBER_OPT_N, CERBER_OPT_T, CERBER_OPT_S, CERBER_OPT_E, CERBER_OPT_P, CERBER_OPT_SL, CERBER_OPT_MA, CERBER_OPT_US, CERBER_OPT_OS );
+function cerber_get_setting_list( $all = false ) {
+	$ret = array( CERBER_SETTINGS, CERBER_OPT, CERBER_OPT_H, CERBER_OPT_U, CERBER_OPT_A, CERBER_OPT_C, CERBER_OPT_N, CERBER_OPT_T, CERBER_OPT_S, CERBER_OPT_E, CERBER_OPT_P, CERBER_OPT_SL, CERBER_OPT_MA, CERBER_OPT_US, CERBER_OPT_OS );
+
+	if ( $all ) {
+		$ret = array_merge( $ret, array( CERBER_GEO_RULES, CERBER_CONFIG ) );
+	}
+
+	return $ret;
 }
 
 function cerber_settings_config( $args = array() ) {
@@ -308,15 +318,30 @@ function cerber_settings_config( $args = array() ) {
 				),
 				'dateformat' => array(
 					'title'     => __( 'Date format', 'wp-cerber' ),
-					'label'     => sprintf( __( 'if empty, the default format %s will be used', 'wp-cerber' ), '<b>' . cerber_date( time() ) . '</b>' ),
+					'label'     => sprintf( __( 'if empty, the default format %s will be used', 'wp-cerber' ), '<b>' . date( crb_get_default_dt_format(), time() ) . '</b>' ),
 					'doclink'   => 'https://wpcerber.com/date-format-setting/',
 					'label_pos' => 'below',
 					'size'      => 16,
 				),
-				'admin_lang' => array(
-					'title' => __( 'Use English for admin interface', 'wp-cerber' ),
+				'plain_date' => array(
+					'title' => __( 'Date format for CSV export', 'wp-cerber' ),
+					'label' => __( 'Use ISO 8601 date format for CSV export files', 'wp-cerber' ),
 					'type'  => 'checkbox',
 				),
+				'admin_lang' => array(
+					'title' => __( 'Use English', 'wp-cerber' ),
+					'label' => __( 'Use English for admin interface', 'wp-cerber' ),
+					'type'  => 'checkbox',
+				),
+				'no_white_my_ip' => array(
+					'title' => __( 'My IP address', 'wp-cerber' ),
+					'label' => __( 'Do not add my IP address to the White IP Access List upon plugin activation', 'wp-cerber' ),
+					'type'  => 'checkbox',
+				),
+				/*'log_errors' => array(
+					'title' => __( 'Log critical errors', 'wp-cerber' ),
+					'type'  => 'checkbox',
+				),*/
 			),
 		),
 
@@ -857,6 +882,7 @@ function cerber_settings_config( $args = array() ) {
 				),
 				'scan_debug'    => array(
 					'title' => __( 'Enable diagnostic logging', 'wp-cerber' ),
+					'label' => 'Once enabled, the log is available here: <a target="_blank" href="' . cerber_admin_link( 'diag-log' ) . '">Diagnostic Log</a>',
 					'type'  => 'checkbox',
 				),
 				'scan_qcleanup' => array(
@@ -1159,6 +1185,7 @@ function cerber_settings_config( $args = array() ) {
 				),*/
 				'master_diag'    => array(
 					'title' => __( 'Enable diagnostic logging', 'wp-cerber' ),
+					'label' => 'Once enabled, the log is available here: <a target="_blank" href="' . cerber_admin_link( 'diag-log' ) . '">Diagnostic Log</a>',
 					'type'  => 'checkbox',
 				),
 			)
@@ -1186,6 +1213,7 @@ function cerber_settings_config( $args = array() ) {
 				),
 				'slave_diag'   => array(
 					'title'   => __( 'Enable diagnostic logging', 'wp-cerber' ),
+					'label' => 'Once enabled, the log is available here: <a target="_blank" href="' . cerber_admin_link( 'diag-log' ) . '">Diagnostic Log</a>',
 					'default' => 0,
 					'type'    => 'checkbox',
 				),
@@ -1399,7 +1427,10 @@ function cerber_get_defaults( $setting = null ) {
 			'cerberproto'  => 0,
 			'usefile'      => 0,
 			'dateformat'   => '',
-			'admin_lang'   => 0
+			'plain_date'   => 0,
+			'admin_lang'   => 0,
+			'no_white_my_ip'   => 0,
+			//'log_errors'   => 1
 
 		),
 		CERBER_OPT_H => array(
@@ -1518,8 +1549,8 @@ function cerber_get_defaults( $setting = null ) {
 			'scan_inew'     => '1',
 			'scan_imod'     => '1',
 			'scan_chmod'    => 0,
-			'scan_tmp'      => '1',
-			'scan_sess'     => '1',
+			'scan_tmp'      => 0,
+			'scan_sess'     => 0,
 			'scan_debug'    => 0,
 			'scan_qcleanup' => '30',
 		),
@@ -1691,7 +1722,7 @@ function cerber_save_settings( $options ) {
 			}
 		}
 		if ( ! empty( $filtered ) ) {
-			$result = update_site_option( $option_name, $filtered );
+			update_site_option( $option_name, $filtered );
 		}
 	}
 
@@ -1788,7 +1819,7 @@ function crb_get_settings( $option = '', $purge_cache = false ) {
 		}
 
 		$set_new = cerber_db_get_var( $sql_new );
-		
+
 		if ( $set_new ) {
 			array_unshift( $set, $set_new );
 		}
@@ -1882,15 +1913,22 @@ function cerber_get_site_option($option = '', $unserialize = true){
 	Load default settings, except Custom Login URL
 */
 function cerber_load_defaults() {
+
 	$save = array();
 	foreach ( cerber_get_defaults() as $option_name => $fields ) {
 		foreach ( $fields as $field_name => $def ) {
 			$save[ $field_name ] = $def;
 		}
 	}
+
 	if ( $path = crb_get_settings( 'loginpath' ) ) {
 		$save['loginpath'] = $path;
 	}
+
+	foreach ( cerber_get_setting_list( true ) as $opt ) {
+		delete_site_option( $opt ); // @since 8.6.3.4
+	}
+
 	cerber_save_settings( $save );
 }
 

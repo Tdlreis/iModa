@@ -290,7 +290,6 @@ jQuery(document).ready(function ($) {
         event.preventDefault();
     });
 
-
     // GEO
 
     $("form#crb-geo-rules .crb-geo-switcher").change(function () {

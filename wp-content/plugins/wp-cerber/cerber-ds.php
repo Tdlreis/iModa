@@ -66,7 +66,7 @@ final class CRB_DS {
 
 				self::update_user_shadow( get_current_user_id(), null, null, self::is_meta_preserve() );
 
-				cerber_bg_task_add( array( 'func' => '_crb_ds_background', 'exec_until' => 'done' ) );
+				cerber_bg_task_add( '_crb_ds_background', array( 'exec_until' => 'done' ) );
 
 				break;
 
@@ -370,7 +370,7 @@ final class CRB_DS {
 	}
 
 	/**
-	 * Protect DB from an authorized user creation
+	 * Protect DB from an unauthorized user creation
 	 *
 	 * @param $user_id
 	 *
@@ -823,19 +823,19 @@ final class CRB_DS {
 	}
 
 	static function get_status() {
-		$ret = '';
+		$ret = array();
 
 		if ( crb_get_settings( 'ds_4acc' ) ) {
 			self::get_type_status( 1, $msg );
-			$ret .= 'Enabled for user accounts. ' . $msg;
+			$ret [] = 'Enabled for user accounts. ' . $msg;
 		}
 		if ( crb_get_settings( 'ds_4roles' ) ) {
 			self::get_type_status( 2, $msg );
-			$ret .= '<p>Enabled for user roles. ' . $msg;
+			$ret [] = 'Enabled for user roles. ' . $msg;
 		}
 		if ( crb_get_settings( 'ds_4opts' ) ) {
 			self::get_type_status( 3, $msg );
-			$ret .= '<p>Enabled for site settings. ' . $msg;
+			$ret [] = 'Enabled for site settings. ' . $msg;
 		}
 
 		return $ret;

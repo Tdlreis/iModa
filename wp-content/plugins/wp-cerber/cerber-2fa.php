@@ -508,7 +508,7 @@ final class CRB_2FA {
 				$ds[] = 'Location: ' . cerber_country_name( $c ) . ' (' . $c . ')';
 			}
 			$ds[] = 'Browser: ' . substr( strip_tags( crb_array_get( $_SERVER, 'HTTP_USER_AGENT', 'Not set' ) ), 0, 1000 );
-			$ds[] = 'Date: ' . cerber_date( time() );
+			$ds[] = 'Date: ' . cerber_date( time(), false );
 
 			$body[] = '';
 			$body[] = __( 'Here are the details of the sign-in attempt', 'wp-cerber' );

@@ -350,7 +350,7 @@ class CRB_Slave_Table extends WP_List_Table {
 				return $val;
 			case 'plugin_v':
 				if ( $val ) {
-					$ret = '<span class="crb-slave-ver">' . $val . '</span>' . ( ( $item['site_key'] ) ? '<span class="crb-vpro" title="Valid until ' . cerber_date( $item['site_key'] ) . '">PRO</span>' : '' );
+					$ret = '<span class="crb-slave-ver">' . $val . '</span>' . ( ( $item['site_key'] ) ? '<span class="crb-vpro" title="Valid until ' . cerber_date( $item['site_key'], false ) . '">PRO</span>' : '' );
 					if ( isset( $pup['new_version'] ) && version_compare( $val, $pup['new_version'], '<' ) ) {
 						$ret .= ' <i style="color: red; font-size: 1.2em;" class="dashicons dashicons-warning"></i>';
 					}

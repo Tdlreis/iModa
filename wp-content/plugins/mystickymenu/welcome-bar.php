@@ -1016,7 +1016,7 @@ function mysticky_welcome_bar_frontend(){
 									jQuery( '.mysticky-welcomebar-fixed' ).css( 'opacity', '1' );
 									$( 'html' ).css( 'margin-bottom', '' );
 									$( 'html' ).attr( 'style', 'margin-top: ' + mysticky_welcomebar_height + 'px !important' );
-									$( '#mysticky-nav' ).css( 'top', mysticky_welcomebar_height + 'px' );
+									$( '.mysticky-welcomebar-apper #mysticky-nav' ).css( 'top', mysticky_welcomebar_height + 'px' );
 								} else {
 									jQuery( '.mysticky-welcomebar-fixed' ).css( 'bottom', '0' );
 									jQuery( '.mysticky-welcomebar-fixed' ).css( 'opacity', '1' );
@@ -1037,7 +1037,7 @@ function mysticky_welcome_bar_frontend(){
 									jQuery( '.mysticky-welcomebar-apper.et_fixed_nav #top-header' ).css( 'top', welcombar_height + 'px' );
 									jQuery( 'head' ).append( '<style id="mysticky_divi_style" type="text/css">.mysticky-welcomebar-apper.et_fixed_nav #main-header {top: ' + welcombar_height + 'px !important}.mysticky-welcomebar-apper.et_fixed_nav #top-header + #main-header{top: ' + divi_total_height + 'px !important}</style>' );
 									$( 'html' ).attr( 'style', 'margin-top: ' + mysticky_welcomebar_height + 'px !important' );
-									$( '#mysticky-nav' ).css( 'top', mysticky_welcomebar_height + 'px' );
+									$( '.mysticky-welcomebar-apper #mysticky-nav' ).css( 'top', mysticky_welcomebar_height + 'px' );
 								} else {
 									jQuery( '.mysticky-welcomebar-fixed' ).css( 'bottom', '0' );
 									jQuery( '.mysticky-welcomebar-fixed' ).css( 'opacity', '1' );

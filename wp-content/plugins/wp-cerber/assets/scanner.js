@@ -402,12 +402,12 @@ jQuery(document).ready(function ($) {
 
         if (scanner_data.errors && scanner_data.errors.length) {
             scanner_data.errors.forEach(function (item, index) {
-                console.error('WP CERBER SCANNER ERROR: ' + item);
+                console.error('WP CERBER SCANNER: ' + item);
             });
         }
         if (crb_response.console_log && crb_response.console_log.length) {
             crb_response.console_log.forEach(function (item) {
-                console.log('WP CERBER: ' + item);
+                console.log('WP CERBER SCANNER: ' + item);
             });
         }
     }

@@ -9,6 +9,18 @@
     line-height: 26px;
 }
 
+#crb-admin .wp-list-table td {
+    color: #222;
+}
+
+#crb-admin .wp-list-table .row-actions span {
+    white-space: nowrap;
+}
+
+#crb-admin .dashicons {
+    line-height: inherit;
+}
+
 /* End of reset */
 
 .crb-display-none {
@@ -58,8 +70,8 @@
 
 #crb-admin input.crb-digits {
     text-align: center;
-    /*font-family: Menlo, Consolas, Monaco, monospace;
-    font-size: 14px;*/
+    font-family: 'Roboto Mono', Menlo, Consolas, Monaco, monospace;
+    /*font-size: 12px;*/
 }
 
 #crb-admin textarea,
@@ -72,10 +84,6 @@
 #crb-admin .tablenav input[type="text"] {
     width: auto;
     margin: 0 0.5em 0 0;
-}
-
-#crb-admin .wp-list-table td {
-    color: #222;
 }
 
 .crb-main a:focus,
@@ -106,7 +114,14 @@
 }
 
 .crb-monospace {
-    font-family: Menlo, Consolas, Monaco, monospace;
+    font-family: 'Roboto Mono', Menlo, Consolas, Monaco, monospace;
+    font-size: 12px;
+    color: #000;
+}
+
+.crb-monospace td {
+    font-size: 12px;
+    color: #000;
 }
 
 /* Settings' forms */
@@ -124,13 +139,15 @@
 }
 .crb-settings .form-table th {
     min-width: 200px;
+    font-weight: 500;
     /*
     padding-top: 15px;
     vertical-align: middle;*/
 }
 .crb-settings label.crb-below {
     padding-top: 0.5em;
-    opacity: 0.8;
+    font-size: 13px;
+    opacity: 0.9;
 }
 .crb-settings .form-table input.crb-wide,
 .crb-settings .form-table select.crb-wide,
@@ -419,7 +436,7 @@
 
 .crb-tab-sessions #ses_started,
 .crb-tab-sessions #ses_expires{
-    width: 15%;
+    /*width: 15%;*/
 }
 
 .crb-tab-sessions .crb-us-lbl {
@@ -430,7 +447,9 @@
     color: white;
 }
 
-
+.crb-table th {
+    white-space: nowrap;
+}
 .crb-table > tbody > tr:nth-child(even){
     background: #f9f9f9
 }
@@ -443,11 +462,24 @@
 .crb-table > tbody > tr.crb-odd{
     background: #FFF
 }
-
 .crb-table > tbody > tr > td {
     vertical-align: middle;
     color: #222;
     min-width: 70px;
+}
+
+.crb_align_right th:not(:first-child),
+.crb_align_right td:not(:first-child) {
+    text-align: right;
+}
+
+.crb_align_left_2 th:nth-child(2),
+.crb_align_left_2 td:nth-child(2) {
+    text-align: left;
+}
+
+.crb-anchor-decorated a {
+    text-decoration: underline;
 }
 
 #crb-traffic td {
@@ -485,6 +517,11 @@
 
 #crb-traffic .crb-request span {
     margin-right: 0.5em;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.2em;
+    padding: 4px 8px;
+    word-break: keep-all;
 }
 
 #crb-traffic .crb-toggle .crb-request {
@@ -501,27 +538,18 @@ td.crb-traffic-details td {
 }
 
 td.crb-traffic-details table td:nth-child(2) {
-    font-family: Menlo, Consolas, Monaco, monospace;
+    font-family: 'Roboto Mono', Menlo, Consolas, Monaco, monospace;
+    font-size: 12px;
 }
 
 .crb-traffic-more {
     position: relative;
     left: -9999em;
 }
-
-
-/*
-td.crb-traffic-details div{
-    overflow: auto;
-    max-height: 600px;
-}*/
 .crb-POST, .crb-ffile{
     /*background-color: #616e7b;*/
     background-color: #69737d;
     color: #fff;
-    display: inline-block;
-    line-height: 1em;
-    padding: 4px 8px;
 }
 .crb-200 {
     color: green;
@@ -531,38 +559,32 @@ td.crb-traffic-details div{
 .crb-405{
     background-color: #FF5733;
     color: #fff;
-    display: inline-block;
-    line-height: 1em;
-    padding: 4px 8px;
 }
 .crb-wp-type-515{
     background-color: #7A804A;
     color: #fff;
-    display: inline-block;
-    line-height: 1em;
-    padding: 4px 8px;
 }
 .crb-wp-type-520{
     background-color: #A00D5C;
     color: #fff;
-    display: inline-block;
-    line-height: 1em;
-    padding: 4px 8px;
 }
+
+.crb-req-status-500,
+.crb-req-status-501,
+.crb-req-status-502{
+    background-color: #51ae43;
+    color: #fff;
+}
+
 .crb-php-error{
     background-color: #8892bf;
     color: #fff;
-    display: inline-block;
-    line-height: 1em;
-    padding: 4px 8px;
 }
 .crb-above{
     background-color: #FFFF55;
-    display: inline-block;
-    line-height: 1em;
-    padding: 4px 8px;
 }
 .crb-fields-table {
+    font-family: "Roboto Mono", Menlo, Consolas, Monaco, monospace;
     min-width: 400px;
     width: 100%;
     margin-right: 2em;
@@ -570,7 +592,7 @@ td.crb-traffic-details div{
     /*border: 1px solid #CCC;*/
 }
 .crb-fields-table.crb-top-table > tbody > tr:first-child td{
-    background-color: #CCC;
+    background-color: #DDD;
     border-color: #CCC;
     color: #000;
 }
@@ -588,8 +610,8 @@ td.crb-traffic-details div{
 .crb-fields-table td:first-child {
     min-width: 150px;
     width: 20%;
-    font-weight: bold;
-    color: #444;
+    font-weight: 500;
+    color: #333;
 }
 .crb-fields-table td:nth-child(2) {
     color: #000;
@@ -711,13 +733,24 @@ td.crb-traffic-details div{
     word-break: keep-all;
 }
 
-.act-details{
-    background-color: #888;
+.crb-log-status{
+    background-color: #777;
     color: #ffffff;
     display: inline-block;
     padding: 0 5px 0 5px;
-    vertical-align: middle;
+
+    line-height: 1.2;
+    padding: 4px 8px;
 }
+
+.crb-status-500 {
+    background-color: #51ae43;
+}
+
+.crb-status-14 {
+    background-color: #000;
+}
+
 p.act-url, .act-role{
     color: #777;
 }
@@ -816,16 +849,21 @@ p.act-url{
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
-.crb10 span, .crb11 span {
+.crb10 span,
+.crb11 span {
     margin-left: -0.7em;
     padding-left: 1.1em; /* 0.7 + 0.4 */
     padding-right: 1em;
+
+    line-height: 1.2;
+    padding: 4px 8px;
 }
-.crb10 span:first-child, .crb11 span:first-child {
+.crb10 span:first-child,
+.crb11 span:first-child {
     display: inline-block;
     background-color: #FF5733;
     margin-right: 1.5em;
-    line-height: 2;
+    line-height: 1.2;
 }
 .crb5 {
     /*border-left: 4px solid #FF5733;*/
@@ -920,8 +958,7 @@ p.act-url{
 .acl-table td:first-child {
     width: 25%;
     white-space: pre;
-    font-family: Menlo, Consolas, Monaco, monospace;
-    font-size: 110%;
+    font-family: 'Roboto Mono', Menlo, Consolas, Monaco, monospace;
 }
 .acl-table td:nth-child(2) {
     width: 37%;
@@ -958,7 +995,7 @@ p.act-url{
 }
 
 .crb-acl-hints td:nth-child(3)  {
-    font-family: Menlo, Consolas, Monaco, monospace;
+    font-family: 'Roboto Mono', Menlo, Consolas, Monaco, monospace;
 }
 
 .crb-acl-hints td {
@@ -1000,6 +1037,7 @@ a.nav-tab:last-of-type{
     color: #0073aa;
     /*color: rgb(0, 103, 153);*/
     font-weight: 700;
+    font-weight: 500;
 }
 .cerber-tabs .nav-tab i{
     font-size: 1.5em;
@@ -1086,7 +1124,6 @@ body.wp-cerber_page_cerber-integrity {
 #crb-scan-display div div p:first-of-type {
     font-size: 200%;
     line-height: 160%;
-    /*font-family: Menlo, Consolas, Monaco, monospace;*/
     color: #000;
     margin: 0;
 }
@@ -1106,7 +1143,8 @@ body.wp-cerber_page_cerber-integrity {
 }
 .crb-scan-info table td:first-child{
     padding-right: 1em;
-    color: #555;
+    vertical-align: top;
+    color: #444;
 }
 .crb-scan-info table td:last-child{
     color: #000;
@@ -1221,7 +1259,8 @@ body.wp-cerber_page_cerber-integrity {
 }
 
 #crb-browse-files tr.crb-item-file td:nth-child(2) {
-    font-family: Menlo, Consolas, Monaco, monospace;
+    font-family: "Roboto Mono", Menlo, Consolas, Monaco, monospace;
+    font-size: 12px;
     color: #000;
     /*cursor: pointer;*/
 }
@@ -1229,10 +1268,10 @@ body.wp-cerber_page_cerber-integrity {
 #crb-browse-files tr.crb-scan-section td {
     padding: 15px 0 15px 10px;
     border-top: 1px dashed #aaa;
-    font-size: 105%;
+    font-size: 115%;
 }
 #crb-browse-files tr.crb-scan-section td span:first-child {
-    font-weight: bold;
+    font-weight: 500;
     color: #333;
     /*margin-right: 0.5em;*/
 }
@@ -1571,7 +1610,7 @@ div#whois:hover {
 #diagnostic h3 {
     margin-top: 0;
 }
-#diagnostic .diag-section {
+#diagnostic .crb-diag-section {
     background-color: #fafafa;
     border-top: 2px solid #ddd;
     /*width: 90%;
@@ -1608,6 +1647,13 @@ div#whois:hover {
     width:50%;
 }
 
+.crb-diag-inner,
+.crb-diag-inner p {
+    font-family: 'Roboto Mono', Menlo, Consolas, Monaco, monospace;
+    font-size: 12px;
+    color: #000;
+}
+
 .crb-plain-table {
     max-height: 440px;
     overflow: auto;
@@ -1620,6 +1666,8 @@ div#whois:hover {
     border: 1px solid #eee;
 }
 .crb-plain-fcw td:first-of-type {
+    font-weight: 500;
+    color: #222;
     width: 30%;
 }
 .crb-plain-table td:not(:first-of-type) {
@@ -1628,7 +1676,7 @@ div#whois:hover {
 .crb-plain-header,
 .crb-plain-fh td:first-of-type {
     color: #000;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 
@@ -1657,7 +1705,7 @@ div#whois:hover {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
-    src: local('Roboto Light'), local('Roboto-Light'), url(fonts/roboto/Roboto-Light.woff) format('woff');
+    src: url(fonts/roboto/Roboto-Light.woff) format('woff');
 }
 @font-face {
     font-family: 'Roboto';
@@ -1676,6 +1724,20 @@ div#whois:hover {
     font-style: normal;
     font-weight: 700;
     src: local('Roboto Bold'), local('Roboto-Bold'), url(fonts/roboto/Roboto-Bold.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Roboto Mono';
+    font-style: normal;
+    font-weight: 400;
+    src:  url(fonts/roboto/Roboto-Mono_400.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto Mono';
+    font-style: normal;
+    font-weight: 500;
+    src:  url(fonts/roboto/Roboto-Mono_500.woff2) format('woff2');
 }
 
 @font-face {
@@ -1937,7 +1999,8 @@ table.vtable > tbody > tr > td {
 /* Diagnostic Log */
 
 #crb-log-viewer pre {
-    font-family: monospace;
+    font-family: 'Roboto Mono', Menlo, Consolas, Monaco, monospace;
+    font-size: 12px;
     white-space: pre-wrap;
     word-wrap: break-word;
     background-color: #fff;
@@ -1963,7 +2026,6 @@ table.vtable > tbody > tr > td {
     line-height: 2em;
     font-weight: bold;
 }
-
 
 /* Switches & Toggle */
 

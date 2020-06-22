@@ -1,10 +1,10 @@
-=== Cerber Security, Antispam & Malware Scan ===
+=== Cerber Security, Anti-spam & Malware Scan ===
 Contributors: gioni
 Tags: security, malware scanner, antispam, firewall, limit login attempts, custom login url, login, recaptcha, captcha, activity, log, logging, whitelist, blacklist, access list
 Requires at least: 4.9
 Requires PHP: 5.6
 Tested up to: 5.4
-Stable tag: 8.6.3
+Stable tag: 8.6.5
 License: GPLv2
 
 Protection against hacker attacks and bots. Malware scanner & integrity checker. User activity log. Antispam reCAPTCHA. Limit login attempts.
@@ -329,6 +329,19 @@ To get access to your dashboard you need to copy the WP Cerber Reset folder to t
 
 
 == Changelog ==
+
+= 8.6.5 =
+* New: File system analytics. It's generated based on the results of the last full integrity scan.
+* New: Logging user deletions. The user’s display name and roles are temporarily stored until all log entries related to the user are deleted.
+* New: Faster export with a new date format for CSV log export.
+* New: Ability to disable adding the website administrator's IP address to the White IP Access List upon WP Cerber activation.
+* Improved: Handling the creation of new users by WooCommerce and membership plugins.
+* Improved: Handling user registrations with prohibited emails.
+* Improved: Handling secure Cerber‘s cookies on websites with SSL encryption enabled.
+* Improved: The performance of the integrity checker and malware scanner on huge websites with a large number of files.
+* Fixed: Loading the default plugin settings has no effect. Now it’s fixed and moved from the admin sidebar to the Tools admin page.
+* [Read more](https://wpcerber.com/wp-cerber-security-8-6-5/)
+
 = 8.6.3 =
 * New: Ability to load IP access list's entries in the CSV format (bulk load).
 * Update: A new malware scanner setting allows you to permit the scanner to change permissions of folders and files when required.

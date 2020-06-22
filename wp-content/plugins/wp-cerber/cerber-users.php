@@ -532,7 +532,9 @@ function crb_admin_save_role_policies( $post ) {
 		}
 	} );
 
-	$settings = get_site_option( CERBER_SETTINGS );
+	if ( ! $settings = get_site_option( CERBER_SETTINGS ) ) {
+		$settings = array();
+	}
 	$settings['crb_role_policies'] = $policies;
 
 	if ( cerber_update_site_option( CERBER_SETTINGS, $settings ) ) {
@@ -662,59 +664,63 @@ function crb_admin_is_current_session( $session_id ) {
 }
 
 function crb_admin_get_user_cell( $user_id = null, $base_url = '', $text = '', $label = '' ) {
-	static $roles, $user_cache = array(), $avatar_cache = array();
+	static $wp_roles, $user_cache = array();
 
 	if ( ! $user_id ) {
 		return '';
 	}
 
-	if ( ! isset( $user_cache[ $user_id ] ) ) {
-		$user_cache[ $user_id ] = get_userdata( $user_id );
+	if ( isset( $user_cache[ $user_id ] ) ) {
+
+		return $user_cache[ $user_id ];
+
 	}
 
-    if ( ! isset( $avatar_cache[ $user_id ] ) ) {
-		$avatar_cache[ $user_id ] = get_avatar( $user_id, 32 );
+	if ( ! $user = get_userdata( $user_id ) ) {
+		if ( ! $user_data = cerber_get_set( 'user_deleted', $user_id ) ) {
+			$user_cache[ $user_id ] = 'UID ' . $user_id;
+
+			return '';
+		}
+	}
+	else {
+		$user_data = array( 'roles' => $user->roles, 'display_name' => $user->display_name );
 	}
 
-	if ( ! isset( $roles ) ) {
-		$roles = wp_roles()->roles;
+	if ( ! isset( $wp_roles ) ) {
+		$wp_roles = wp_roles()->roles;
 	}
 
-	$ret = '';
-
-	if ( $u = $user_cache[ $user_id ] ) {
-
-		$r = '';
-		if ( ! is_multisite() && $u->roles ) {
-			$r = array();
-			foreach ( $u->roles as $role ) {
-				$r[] = $roles[ $role ]['name'];
-			}
-			$r = '<span class="act-role">' . implode( ', ', $r ) . '</span>';
+	$roles = '';
+	if ( ! is_multisite() && $user_data['roles'] ) {
+		$r = array();
+		foreach ( $user_data['roles'] as $role ) {
+			$r[] = $wp_roles[ $role ]['name'];
 		}
-
-		$lbl = ( $label ) ? '<span class="crb-us-lbl">' . $label . '</span>' : '';
-
-		if ( $base_url ) {
-			$ret = '<a href="' . $base_url . '&amp;filter_user=' . $user_id . '"><b>' . $u->display_name . '</b></a>' . $lbl . '<p>' . $r . '</p>';
-		}
-		else {
-			$ret = '<b>' . $u->display_name . '</b>' . $lbl . '<p>' . $r . '</p>';
-		}
-
-		$ret = '<div class="crb-us-name">' . $ret . '</div>';
-
-		if ( $avatar = $avatar_cache[ $user_id ] ) {
-			$avatar = '<td>' . $avatar . '</td>';
-		}
-		else {
-			$avatar = '';
-		}
-
-		$ret = '<table class="crb-avatar"><tr>' . $avatar . '<td>' . $ret . $text . '</td></tr></table>';
+		$roles = '<span class="act-role">' . implode( ', ', $r ) . '</span>';
 	}
 
-	return $ret;
+	$lbl = ( $label ) ? '<span class="crb-us-lbl">' . $label . '</span>' : '';
+
+	if ( $base_url ) {
+		$ret = '<a href="' . $base_url . '&amp;filter_user=' . $user_id . '"><b>' . $user_data['display_name'] . '</b></a>' . $lbl . '<p>' . $roles . '</p>';
+	}
+	else {
+		$ret = '<b>' . $user_data['display_name'] . '</b>' . $lbl . '<p>' . $roles . '</p>';
+	}
+
+	$ret = '<div class="crb-us-name">' . $ret . '</div>';
+
+	if ( $avatar = get_avatar( $user_id, 32 ) ) {
+		$avatar = '<td>' . $avatar . '</td>';
+	}
+	else {
+		$avatar = '';
+	}
+
+	$user_cache[ $user_id ] = '<table class="crb-avatar"><tr>' . $avatar . '<td>' . $ret . $text . '</td></tr></table>';
+
+	return $user_cache[ $user_id ];
 }
 
 function crb_admin_show_sessions() {
@@ -779,7 +785,7 @@ function crb_pdata_exporter_act( $email_address, $page = 1 ) {
 			$value = json_encode( $value, JSON_UNESCAPED_UNICODE );
 
 			// Format is defined by WordPress
-			$data[] = array( 'name'  => cerber_date( $row->stamp ), // First column
+			$data[] = array( 'name'  => cerber_date( $row->stamp, false ), // First column
 			                 'value' => $value // Second column
 			);
 		}
@@ -837,7 +843,7 @@ function crb_pdata_exporter_trf( $email_address, $page = 1 ) {
 			$value = json_encode( $value, JSON_UNESCAPED_UNICODE );
 
 			// Format is defined by WordPress
-			$data[] = array( 'name'  => cerber_date( $row->stamp ), // First column
+			$data[] = array( 'name'  => cerber_date( $row->stamp, false ), // First column
 			                 'value' => $value // Second column
 			);
 		}
@@ -904,6 +910,8 @@ function crb_pdata_eraser( $email_address, $page = 1 ) {
 		     && ( empty( $reg['user'] ) || $reg['user'] == $user->ID ) ) {
 			delete_user_meta( $user->ID, '_crb_reg_' );
 		}
+
+		cerber_delete_set( 'user_deleted', $user->ID );
 
 		if ( crb_get_settings( 'pdata_sessions' ) ) {
 			update_user_meta( $user->ID , 'session_tokens', array() );
